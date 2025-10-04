@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExpenseTracker - Welcome</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .welcome-container {
+      background: white;
+      padding: 60px 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 50%;
+      margin: 0 auto 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      color: white;
+      font-weight: bold;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 32px;
+    }
+
+    .tagline {
+      color: #666;
+      margin-bottom: 40px;
+      font-size: 18px;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      padding: 15px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .features {
+      margin-top: 30px;
+      text-align: left;
+    }
+
+    .feature {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      color: #666;
+    }
+
+    .feature-icon {
+      width: 20px;
+      height: 20px;
+      background: #667eea;
+      border-radius: 50%;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="welcome-container">
+    <div class="logo">ET</div>
+    <h1>ExpenseTracker</h1>
+    <p class="tagline">Smart expense management for modern teams</p>
+
+    <div class="btn-group">
+      <a href="signup.html" class="btn btn-primary">Get Started - Create Account</a>
+      <a href="login.html" class="btn btn-secondary">Already have an account? Login</a>
+    </div>
+
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon"></div>
+        <span>Track expenses with smart categorization</span>
+      </div>
+      <div class="feature">
+        <div class="feature-icon"></div>
+        <span>Multi-level approval workflows</span>
+      </div>
+      <div class="feature">
+        <div class="feature-icon"></div>
+        <span>Real-time reporting and analytics</span>
+      </div>
+      <div class="feature">
+        <div class="feature-icon"></div>
+        <span>Role-based access control</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

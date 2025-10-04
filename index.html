@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExpenseTracker - Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8f9fa;
+      color: #333;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 20px;
+      position: relative;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .user-info {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 14px;
+    }
+
+    .logout-btn {
+      position: absolute;
+      top: 45px;
+      right: 20px;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .logout-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .tabs {
+      background: white;
+      border-bottom: 1px solid #eee;
+      padding: 0 20px;
+      display: flex;
+      gap: 0;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      padding: 15px 25px;
+      cursor: pointer;
+      font-size: 16px;
+      color: #666;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .tab-btn:hover {
+      color: #667eea;
+      background: #f8f9fa;
+    }
+
+    .tab-btn.active {
+      color: #667eea;
+      border-bottom-color: #667eea;
+      background: #f8f9fa;
+    }
+
+    .content {
+      padding: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 25px;
+    }
+
+    .card h3 {
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #555;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #eee;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #28a745, #20c997);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #dc3545, #e73c7e);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #6c757d, #495057);
+    }
+
+    .no-data {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+
+    .expense-list {
+      border: 1px solid #eee;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .expense-item {
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: relative;
+    }
+
+    .expense-item:last-child {
+      border-bottom: none;
+    }
+
+    .expense-info {
+      flex: 1;
+    }
+
+    .expense-info h4 {
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    .expense-info p {
+      color: #666;
+      font-size: 14px;
+      margin: 2px 0;
+    }
+
+    .expense-amount {
+      font-size: 18px;
+      font-weight: 600;
+      color: #667eea;
+    }
+
+    .expense-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .expense-actions button {
+      padding: 8px 16px;
+      font-size: 12px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status-approved {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-rejected {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    /* OCR Upload Styles */
+    .upload-zone {
+      border: 2px dashed #ddd;
+      border-radius: 8px;
+      padding: 30px;
+      text-align: center;
+      transition: border-color 0.3s, background-color 0.3s;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: #667eea;
+      background-color: #f8f9ff;
+    }
+
+    .upload-icon {
+      font-size: 48px;
+      color: #ddd;
+      margin-bottom: 15px;
+    }
+
+    .upload-zone.dragover .upload-icon {
+      color: #667eea;
+    }
+
+    .ocr-result {
+      background: #e8f5e8;
+      border: 1px solid #28a745;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 15px;
+      display: none;
+    }
+
+    .ocr-result h4 {
+      color: #155724;
+      margin-bottom: 10px;
+    }
+
+    .receipt-preview {
+      max-width: 200px;
+      max-height: 200px;
+      border-radius: 8px;
+      margin-top: 10px;
+      border: 1px solid #ddd;
+    }
+
+    /* Approval Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 15% auto;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .modal-header h3 {
+      color: #333;
+      margin: 0;
+    }
+
+    .close {
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .close:hover {
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>ExpenseTracker</h1>
+    <div id="userInfo" class="user-info">Loading...</div>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('home')">Home</button>
+    <button class="tab-btn" onclick="switchTab('submit')">Submit</button>
+    <button class="tab-btn" onclick="switchTab('expenses')">Expenses</button>
+    <button class="tab-btn" onclick="switchTab('approvals')">Approvals</button>
+    <button class="tab-btn" onclick="switchTab('admin')" id="adminTab">Admin</button>
+  </div>
+
+  <div class="content">
+    <!-- Home Tab -->
+    <div id="home" class="tab-pane active">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="totalExpenses">0</div>
+          <div class="stat-label">Total Expenses</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="pendingApprovals">0</div>
+          <div class="stat-label">Pending Approvals</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="thisMonth">$0</div>
+          <div class="stat-label">This Month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="avgExpense">$0</div>
+          <div class="stat-label">Average Expense</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Welcome to ExpenseTracker!</h3>
+        <div class="no-data">
+          Get started by submitting your first expense report in the Submit tab.
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit Tab -->
+    <div id="submit" class="tab-pane">
+      <div class="card">
+        <h3>Submit New Expense</h3>
+
+        <!-- OCR Upload Zone -->
+        <div class="upload-zone" onclick="document.getElementById('receiptUpload').click()" 
+             ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+          <div class="upload-icon">📄</div>
+          <p><strong>Upload Receipt for OCR Processing</strong></p>
+          <p>Drag & drop or click to upload receipt image</p>
+          <p style="font-size: 12px; color: #666; margin-top: 10px;">
+            Supports: JPG, PNG, PDF • Auto-fills expense details
+          </p>
+          <input type="file" id="receiptUpload" accept="image/*,application/pdf" style="display: none;" onchange="processReceipt(event)">
+        </div>
+
+        <div id="ocrResult" class="ocr-result">
+          <h4>📋 OCR Processing Complete</h4>
+          <p>Extracted information has been auto-filled in the form below. Please verify the details.</p>
+        </div>
+
+        <form id="expenseForm" onsubmit="submitExpense(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="expenseTitle">Title</label>
+              <input type="text" id="expenseTitle" required placeholder="e.g. Business Lunch">
+            </div>
+            <div class="form-group">
+              <label for="expenseAmount">Amount ($)</label>
+              <input type="number" id="expenseAmount" step="0.01" required placeholder="0.00">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="expenseCategory">Category</label>
+              <select id="expenseCategory" required>
+                <option value="">Select Category</option>
+                <option value="travel">Travel</option>
+                <option value="meals">Meals & Entertainment</option>
+                <option value="office">Office Supplies</option>
+                <option value="software">Software & Subscriptions</option>
+                <option value="marketing">Marketing</option>
+                <option value="fuel">Fuel & Transportation</option>
+                <option value="accommodation">Accommodation</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="expenseDate">Date</label>
+              <input type="date" id="expenseDate" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="expenseDescription">Description</label>
+            <textarea id="expenseDescription" rows="4" placeholder="Additional details about this expense..."></textarea>
+          </div>
+
+          <div id="receiptPreview" style="display: none;">
+            <label>Receipt Preview</label>
+            <img id="receiptImage" class="receipt-preview" alt="Receipt">
+          </div>
+
+          <button type="submit" class="btn">Submit Expense</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Expenses Tab -->
+    <div id="expenses" class="tab-pane">
+      <div class="card">
+        <h3>My Expenses</h3>
+        <div id="expensesList" class="no-data">
+          Loading your expenses...
+        </div>
+      </div>
+    </div>
+
+    <!-- Approvals Tab -->
+    <div id="approvals" class="tab-pane">
+      <div class="card">
+        <h3>Pending Approvals</h3>
+        <div id="approvalsList" class="no-data">
+          Loading approvals...
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Tab -->
+    <div id="admin" class="tab-pane">
+      <div class="card">
+        <h3>Admin Panel</h3>
+        <div class="no-data">
+          Admin functionality - User management and system settings
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Approval Modal -->
+  <div id="approvalModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">Expense Review</h3>
+        <span class="close" onclick="closeApprovalModal()">&times;</span>
+      </div>
+      <div id="modalBody">
+        <!-- Expense details will be populated here -->
+      </div>
+      <div class="modal-footer" style="text-align: right; margin-top: 20px;">
+        <button class="btn btn-secondary" onclick="closeApprovalModal()">Cancel</button>
+        <button class="btn btn-success" onclick="confirmApproval()" style="margin-left: 10px;">Approve</button>
+        <button class="btn btn-danger" onclick="confirmRejection()" style="margin-left: 10px;">Reject</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Global variables
+    let currentUser = null;
+    let expenses = [];
+    let currentExpenseId = null;
+
+    // Initialize app when page loads
+    window.onload = function() {
+      console.log('Dashboard loaded, initializing...');
+      loadUserData();
+      setupRoleAccess();
+      loadExpenses();
+      updateStats();
+
+      // Set today's date as default
+      const today = new Date().toISOString().split('T')[0];
+      const dateInput = document.getElementById('expenseDate');
+      if (dateInput) {
+        dateInput.value = today;
+      }
+    };
+
+    // Load user data from localStorage
+    function loadUserData() {
+      console.log('Loading user data...');
+      const userData = localStorage.getItem('userData');
+      const userRole = localStorage.getItem('userRole');
+
+      if (userData) {
+        try {
+          currentUser = JSON.parse(userData);
+          document.getElementById('userInfo').textContent = 
+            `Welcome, ${currentUser.name} (${currentUser.role || userRole})`;
+          console.log('User loaded:', currentUser.name);
+        } catch (e) {
+          console.error('Error parsing user data:', e);
+          document.getElementById('userInfo').textContent = 'Error loading user';
+        }
+      } else {
+        console.log('No user data found');
+        document.getElementById('userInfo').textContent = 'Not logged in';
+        setTimeout(() => {
+          window.location.href = 'welcome.html';
+        }, 2000);
+      }
+    }
+
+    // Setup role-based access
+    function setupRoleAccess() {
+      const userRole = localStorage.getItem('userRole') || 'EMPLOYEE';
+      const adminTab = document.getElementById('adminTab');
+
+      console.log('Setting up role access for:', userRole);
+
+      if (userRole !== 'ADMIN') {
+        if (adminTab) {
+          adminTab.style.display = 'none';
+          console.log('Admin tab hidden for non-admin user');
+        }
+      } else {
+        console.log('Admin access granted');
+      }
+    }
+
+    // Switch between tabs
+    function switchTab(tabId) {
+      console.log('Switching to tab:', tabId);
+
+      // Check admin access
+      const userRole = localStorage.getItem('userRole') || 'EMPLOYEE';
+      if (tabId === 'admin' && userRole !== 'ADMIN') {
+        alert('Access denied. Admin privileges required.');
+        return;
+      }
+
+      // Update active tab button
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      const activeBtn = document.querySelector(`[onclick="switchTab('${tabId}')"]`);
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+      }
+
+      // Update active tab pane
+      document.querySelectorAll('.tab-pane').forEach(pane => {
+        pane.classList.remove('active');
+      });
+
+      const activePane = document.getElementById(tabId);
+      if (activePane) {
+        activePane.classList.add('active');
+      }
+
+      // Load data for specific tabs
+      if (tabId === 'expenses') {
+        displayExpenses();
+      } else if (tabId === 'approvals') {
+        displayApprovals();
+      }
+    }
+
+    // OCR and Receipt Processing Functions
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.currentTarget.classList.add('dragover');
+    }
+
+    function handleDragLeave(e) {
+      e.currentTarget.classList.remove('dragover');
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('dragover');
+
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        processReceiptFile(files[0]);
+      }
+    }
+
+    function processReceipt(event) {
+      const file = event.target.files[0];
+      if (file) {
+        processReceiptFile(file);
+      }
+    }
+
+    function processReceiptFile(file) {
+      console.log('Processing receipt:', file.name);
+
+      // Show processing message
+      const ocrResult = document.getElementById('ocrResult');
+      ocrResult.innerHTML = '<h4>🔄 Processing receipt with OCR...</h4><p>Please wait while we extract information from your receipt.</p>';
+      ocrResult.style.display = 'block';
+
+      // Create file reader for preview
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const receiptPreview = document.getElementById('receiptPreview');
+        const receiptImage = document.getElementById('receiptImage');
+        receiptImage.src = e.target.result;
+        receiptPreview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+
+      // Simulate OCR processing (in real app, would call OCR API)
+      setTimeout(() => {
+        simulateOCRExtraction(file.name);
+      }, 2000);
+    }
+
+    function simulateOCRExtraction(filename) {
+      // Simulate OCR results based on filename or random data
+      const ocrData = generateMockOCRData(filename);
+
+      // Auto-fill form with extracted data
+      document.getElementById('expenseTitle').value = ocrData.title;
+      document.getElementById('expenseAmount').value = ocrData.amount;
+      document.getElementById('expenseCategory').value = ocrData.category;
+      document.getElementById('expenseDate').value = ocrData.date;
+      document.getElementById('expenseDescription').value = ocrData.description;
+
+      // Show success message
+      const ocrResult = document.getElementById('ocrResult');
+      ocrResult.innerHTML = `
+        <h4>✅ OCR Processing Complete</h4>
+        <p><strong>Extracted Information:</strong></p>
+        <ul style="margin: 10px 0 0 20px; color: #155724;">
+          <li>Title: ${ocrData.title}</li>
+          <li>Amount: $${ocrData.amount}</li>
+          <li>Category: ${ocrData.category}</li>
+          <li>Date: ${ocrData.date}</li>
+        </ul>
+        <p style="margin-top: 10px;"><em>Please verify the extracted information and make any necessary corrections before submitting.</em></p>
+      `;
+      ocrResult.style.display = 'block';
+    }
+
+    function generateMockOCRData(filename) {
+      // Generate realistic OCR data based on common receipt patterns
+      const merchants = ['Starbucks', 'Shell Gas Station', 'Office Depot', 'Hilton Hotel', 'Delta Airlines', 'Uber', 'McDonald\'s', 'Best Buy'];
+      const categories = ['meals', 'fuel', 'office', 'accommodation', 'travel', 'travel', 'meals', 'office'];
+
+      const randomIndex = Math.floor(Math.random() * merchants.length);
+      const merchant = merchants[randomIndex];
+      const category = categories[randomIndex];
+
+      const amounts = [15.50, 45.20, 67.89, 125.00, 234.50, 28.75, 8.99, 89.95];
+      const amount = amounts[Math.floor(Math.random() * amounts.length)];
+
+      const today = new Date();
+      const randomDays = Math.floor(Math.random() * 7);
+      const receiptDate = new Date(today.getTime() - (randomDays * 24 * 60 * 60 * 1000));
+
+      return {
+        title: `${merchant} - Business Expense`,
+        amount: amount,
+        category: category,
+        date: receiptDate.toISOString().split('T')[0],
+        description: `Expense at ${merchant} - extracted from receipt via OCR`
+      };
+    }
+
+    // Submit expense form
+    function submitExpense(event) {
+      event.preventDefault();
+      console.log('Submitting expense...');
+
+      const expense = {
+        id: Date.now(),
+        title: document.getElementById('expenseTitle').value,
+        amount: parseFloat(document.getElementById('expenseAmount').value),
+        category: document.getElementById('expenseCategory').value,
+        date: document.getElementById('expenseDate').value,
+        description: document.getElementById('expenseDescription').value,
+        status: 'pending',
+        submittedBy: currentUser ? currentUser.name : 'Demo User',
+        submittedById: currentUser ? currentUser.email : 'demo@example.com',
+        submittedAt: new Date().toISOString(),
+        hasReceipt: document.getElementById('receiptPreview').style.display === 'block'
+      };
+
+      expenses.push(expense);
+      localStorage.setItem('expenses', JSON.stringify(expenses));
+
+      // Reset form and OCR result
+      document.getElementById('expenseForm').reset();
+      document.getElementById('expenseDate').value = new Date().toISOString().split('T')[0];
+      document.getElementById('ocrResult').style.display = 'none';
+      document.getElementById('receiptPreview').style.display = 'none';
+
+      // Update UI
+      updateStats();
+
+      alert('Expense submitted successfully!');
+      switchTab('expenses');
+    }
+
+    // Load expenses from localStorage
+    function loadExpenses() {
+      console.log('Loading expenses...');
+      const stored = localStorage.getItem('expenses');
+      if (stored) {
+        try {
+          expenses = JSON.parse(stored);
+          console.log('Loaded', expenses.length, 'expenses');
+        } catch (e) {
+          console.error('Error loading expenses:', e);
+          expenses = [];
+        }
+      } else {
+        expenses = [];
+      }
+      displayExpenses();
+    }
+
+    // Display expenses
+    function displayExpenses() {
+      const container = document.getElementById('expensesList');
+      const userEmail = currentUser ? currentUser.email : 'demo@example.com';
+      const userExpenses = expenses.filter(exp => exp.submittedById === userEmail);
+
+      if (userExpenses.length === 0) {
+        container.innerHTML = '<div class="no-data">No expenses submitted yet. Go to the Submit tab to add your first expense.</div>';
+        return;
+      }
+
+      container.innerHTML = '<div class="expense-list">' + 
+        userExpenses.map(expense => `
+          <div class="expense-item">
+            <div class="expense-info">
+              <h4>${expense.title} ${expense.hasReceipt ? '📄' : ''}</h4>
+              <p><strong>Category:</strong> ${expense.category}</p>
+              <p><strong>Date:</strong> ${new Date(expense.date).toLocaleDateString()}</p>
+              <p><strong>Description:</strong> ${expense.description || 'No description'}</p>
+              <p><strong>Status:</strong> <span class="status-badge status-${expense.status}">${expense.status}</span></p>
+              ${expense.approvedBy ? `<p><strong>Approved by:</strong> ${expense.approvedBy}</p>` : ''}
+              ${expense.rejectedBy ? `<p><strong>Rejected by:</strong> ${expense.rejectedBy}</p>` : ''}
+            </div>
+            <div class="expense-amount">$${expense.amount.toFixed(2)}</div>
+          </div>
+        `).join('') + '</div>';
+    }
+
+    // Display approvals with enhanced modal
+    function displayApprovals() {
+      const container = document.getElementById('approvalsList');
+      const userRole = localStorage.getItem('userRole') || 'EMPLOYEE';
+
+      if (userRole === 'EMPLOYEE') {
+        container.innerHTML = '<div class="no-data">Employees cannot approve expenses.</div>';
+        return;
+      }
+
+      const userEmail = currentUser ? currentUser.email : 'demo@example.com';
+      const pendingExpenses = expenses.filter(exp => 
+        exp.status === 'pending' && exp.submittedById !== userEmail
+      );
+
+      if (pendingExpenses.length === 0) {
+        container.innerHTML = '<div class="no-data">No pending approvals.</div>';
+        return;
+      }
+
+      container.innerHTML = '<div class="expense-list">' + 
+        pendingExpenses.map(expense => `
+          <div class="expense-item">
+            <div class="expense-info">
+              <h4>${expense.title} ${expense.hasReceipt ? '📄' : ''}</h4>
+              <p><strong>Submitted by:</strong> ${expense.submittedBy}</p>
+              <p><strong>Category:</strong> ${expense.category}</p>
+              <p><strong>Date:</strong> ${new Date(expense.date).toLocaleDateString()}</p>
+              <p><strong>Description:</strong> ${expense.description || 'No description'}</p>
+              <p><strong>Submitted on:</strong> ${new Date(expense.submittedAt).toLocaleDateString()}</p>
+              <div class="expense-actions">
+                <button class="btn btn-success" onclick="openApprovalModal(${expense.id}, 'approve')">✓ Approve</button>
+                <button class="btn btn-danger" onclick="openApprovalModal(${expense.id}, 'reject')">✗ Reject</button>
+                <button class="btn btn-secondary" onclick="viewExpenseDetails(${expense.id})">👁️ Details</button>
+              </div>
+            </div>
+            <div class="expense-amount">$${expense.amount.toFixed(2)}</div>
+          </div>
+        `).join('') + '</div>';
+    }
+
+    // Approval Modal Functions
+    function openApprovalModal(expenseId, action) {
+      const expense = expenses.find(exp => exp.id === expenseId);
+      if (!expense) return;
+
+      currentExpenseId = expenseId;
+      const modal = document.getElementById('approvalModal');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalBody = document.getElementById('modalBody');
+
+      modalTitle.textContent = action === 'approve' ? 'Approve Expense' : 'Reject Expense';
+
+      modalBody.innerHTML = `
+        <div style="margin-bottom: 20px;">
+          <h4>${expense.title}</h4>
+          <p><strong>Amount:</strong> $${expense.amount.toFixed(2)}</p>
+          <p><strong>Category:</strong> ${expense.category}</p>
+          <p><strong>Date:</strong> ${new Date(expense.date).toLocaleDateString()}</p>
+          <p><strong>Submitted by:</strong> ${expense.submittedBy}</p>
+          <p><strong>Description:</strong> ${expense.description || 'No description'}</p>
+          ${expense.hasReceipt ? '<p><strong>Receipt:</strong> ✅ Attached</p>' : '<p><strong>Receipt:</strong> ❌ Not attached</p>'}
+        </div>
+
+        ${action === 'reject' ? `
+          <div class="form-group">
+            <label for="rejectionReason">Reason for Rejection (Optional)</label>
+            <textarea id="rejectionReason" rows="3" placeholder="Provide reason for rejection..."></textarea>
+          </div>
+        ` : ''}
+
+        <div style="background: ${action === 'approve' ? '#d4edda' : '#f8d7da'}; 
+                    color: ${action === 'approve' ? '#155724' : '#721c24'}; 
+                    padding: 15px; border-radius: 5px; margin-top: 15px;">
+          <p><strong>Are you sure you want to ${action} this expense?</strong></p>
+          <p>This action cannot be undone.</p>
+        </div>
+      `;
+
+      // Show/hide appropriate buttons
+      const approveBtn = modal.querySelector('.btn-success');
+      const rejectBtn = modal.querySelector('.btn-danger');
+
+      if (action === 'approve') {
+        approveBtn.style.display = 'inline-block';
+        rejectBtn.style.display = 'none';
+      } else {
+        approveBtn.style.display = 'none';
+        rejectBtn.style.display = 'inline-block';
+      }
+
+      modal.style.display = 'block';
+    }
+
+    function closeApprovalModal() {
+      document.getElementById('approvalModal').style.display = 'none';
+      currentExpenseId = null;
+    }
+
+    function confirmApproval() {
+      if (currentExpenseId) {
+        approveExpense(currentExpenseId);
+        closeApprovalModal();
+      }
+    }
+
+    function confirmRejection() {
+      if (currentExpenseId) {
+        const reason = document.getElementById('rejectionReason')?.value || '';
+        rejectExpense(currentExpenseId, reason);
+        closeApprovalModal();
+      }
+    }
+
+    // Approve expense
+    function approveExpense(expenseId) {
+      const expense = expenses.find(exp => exp.id === expenseId);
+      if (expense) {
+        expense.status = 'approved';
+        expense.approvedBy = currentUser ? currentUser.name : 'Manager';
+        expense.approvedAt = new Date().toISOString();
+        localStorage.setItem('expenses', JSON.stringify(expenses));
+        displayApprovals();
+        updateStats();
+        alert('Expense approved successfully!');
+      }
+    }
+
+    // Reject expense
+    function rejectExpense(expenseId, reason = '') {
+      const expense = expenses.find(exp => exp.id === expenseId);
+      if (expense) {
+        expense.status = 'rejected';
+        expense.rejectedBy = currentUser ? currentUser.name : 'Manager';
+        expense.rejectedAt = new Date().toISOString();
+        expense.rejectionReason = reason;
+        localStorage.setItem('expenses', JSON.stringify(expenses));
+        displayApprovals();
+        updateStats();
+        alert('Expense rejected.');
+      }
+    }
+
+    // View expense details
+    function viewExpenseDetails(expenseId) {
+      const expense = expenses.find(exp => exp.id === expenseId);
+      if (expense) {
+        alert(`Expense Details:
+
+Title: ${expense.title}
+Amount: $${expense.amount}
+Category: ${expense.category}
+Date: ${expense.date}
+Description: ${expense.description}
+Submitted by: ${expense.submittedBy}
+Submitted on: ${new Date(expense.submittedAt).toLocaleString()}
+Receipt: ${expense.hasReceipt ? 'Yes' : 'No'}`);
+      }
+    }
+
+    // Update statistics
+    function updateStats() {
+      const userEmail = currentUser ? currentUser.email : 'demo@example.com';
+      const userExpenses = expenses.filter(exp => exp.submittedById === userEmail);
+      const userRole = localStorage.getItem('userRole') || 'EMPLOYEE';
+
+      // For managers/admins, show pending approvals they can handle
+      let pending = 0;
+      if (userRole !== 'EMPLOYEE') {
+        pending = expenses.filter(exp => exp.status === 'pending' && exp.submittedById !== userEmail).length;
+      }
+
+      const thisMonth = new Date();
+      const monthlyExpenses = userExpenses.filter(exp => {
+        const expDate = new Date(exp.date);
+        return expDate.getMonth() === thisMonth.getMonth() && 
+               expDate.getFullYear() === thisMonth.getFullYear();
+      });
+
+      const totalAmount = userExpenses.reduce((sum, exp) => sum + exp.amount, 0);
+      const monthlyAmount = monthlyExpenses.reduce((sum, exp) => sum + exp.amount, 0);
+      const avgAmount = userExpenses.length > 0 ? totalAmount / userExpenses.length : 0;
+
+      document.getElementById('totalExpenses').textContent = userExpenses.length;
+      document.getElementById('pendingApprovals').textContent = pending;
+      document.getElementById('thisMonth').textContent = `$${monthlyAmount.toFixed(2)}`;
+      document.getElementById('avgExpense').textContent = `$${avgAmount.toFixed(2)}`;
+    }
+
+    // Logout function
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('userData');
+        alert('Logged out successfully. Redirecting to welcome page...');
+        window.location.href = 'welcome.html';
+      }
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('approvalModal');
+      if (event.target === modal) {
+        closeApprovalModal();
+      }
+    }
+  </script>
+</body>
+</html>

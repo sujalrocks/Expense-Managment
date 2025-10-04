@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExpenseTracker - Sign Up</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .signup-container {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 50%;
+      margin: 0 auto 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: white;
+      font-weight: bold;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 28px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      flex: 1;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #555;
+      font-weight: 500;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #eee;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    select {
+      cursor: pointer;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s;
+      margin-bottom: 20px;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .links {
+      text-align: center;
+    }
+
+    .links a {
+      color: #667eea;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+    }
+
+    .success-message {
+      background: #dfd;
+      color: #363;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    .error-message {
+      background: #fee;
+      color: #c33;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    .role-info {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="signup-container">
+    <div class="logo">
+      <div class="logo-icon">ET</div>
+      <h1>Create Account</h1>
+    </div>
+
+    <div id="success-message" class="success-message"></div>
+    <div id="error-message" class="error-message"></div>
+
+    <form id="signupForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" required>
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" required minlength="6">
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="company">Company</label>
+          <input type="text" id="company" required>
+        </div>
+        <div class="form-group">
+          <label for="role">Role</label>
+          <select id="role" required>
+            <option value="">Select Role</option>
+            <option value="EMPLOYEE">Employee</option>
+            <option value="MANAGER">Manager</option>
+            <option value="ADMIN">Admin</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="role-info">
+        <strong>Role Permissions:</strong><br>
+        • <strong>Employee:</strong> Submit and track own expenses<br>
+        • <strong>Manager:</strong> Approve team expenses + employee features<br>
+        • <strong>Admin:</strong> Full system access + manage users and settings
+      </div>
+
+      <button type="submit" class="btn">Create Account</button>
+    </form>
+
+    <div class="links">
+      <a href="login.html">Already have an account? Login</a>
+      <a href="welcome.html">← Back to Welcome</a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const company = document.getElementById('company').value;
+        const role = document.getElementById('role').value;
+
+        const successDiv = document.getElementById('success-message');
+        const errorDiv = document.getElementById('error-message');
+
+        // Clear previous messages
+        successDiv.style.display = 'none';
+        errorDiv.style.display = 'none';
+
+        // Validation
+        if (password !== confirmPassword) {
+            errorDiv.textContent = 'Passwords do not match!';
+            errorDiv.style.display = 'block';
+            return;
+        }
+
+        if (password.length < 6) {
+            errorDiv.textContent = 'Password must be at least 6 characters long!';
+            errorDiv.style.display = 'block';
+            return;
+        }
+
+        // Check if email already exists
+        const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+        const emailExists = registeredUsers.some(user => user.email === email);
+
+        if (emailExists) {
+            errorDiv.textContent = 'An account with this email already exists!';
+            errorDiv.style.display = 'block';
+            return;
+        }
+
+        // Create new user
+        const newUser = {
+            name: `${firstName} ${lastName}`,
+            firstName,
+            lastName,
+            email,
+            password,
+            company,
+            role,
+            createdAt: new Date().toISOString()
+        };
+
+        // Save to registered users
+        registeredUsers.push(newUser);
+        localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+
+        // Set current user data
+        localStorage.setItem('userRole', role);
+        localStorage.setItem('userData', JSON.stringify(newUser));
+
+        // Show success message
+        successDiv.textContent = 'Account created successfully! Redirecting to the dashboard...';
+        successDiv.style.display = 'block';
+
+        // Redirect after 2 seconds to index.html
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 2000);
+    });
+
+    // Real-time password validation
+    document.getElementById('confirmPassword').addEventListener('input', function() {
+        const password = document.getElementById('password').value;
+        const confirmPassword = this.value;
+
+        if (confirmPassword && password !== confirmPassword) {
+            this.style.borderColor = '#e74c3c';
+        } else {
+            this.style.borderColor = '#eee';
+        }
+    });
+  </script>
+</body>
+</html>
